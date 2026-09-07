@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Quick — The best price, found fast.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #F2F4FB;
+    --surface: #FFFFFF;
+    --surface-alt: #E7EAF6;
+    --ink: #10131F;
+    --ink-muted: #5B6180;
+    --line: #D9DEF0;
+    --coral: #FF5A3C;
+    --coral-dim: #FFE6E0;
+    --mint: #17B978;
+    --mint-dim: #E1F7ED;
+    --star: #C6902A;
+    --font-display: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+  }
+  html[data-theme="dark"] {
+    --bg: #0A0D18;
+    --surface: #12162A;
+    --surface-alt: #181D34;
+    --ink: #ECEEFC;
+    --ink-muted: #8890B8;
+    --line: #262C48;
+    --coral: #FF6A4D;
+    --coral-dim: #3A2420;
+    --mint: #22C77F;
+    --mint-dim: #123324;
+    --star: #E3B15B;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-display);
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+  button, select, input { font-family: inherit; }
+  table { border-collapse: collapse; width: 100%; }
+  .mono { font-family: var(--font-mono); }
+  .muted { color: var(--ink-muted); }
+  .tabular { font-variant-numeric: tabular-nums; }
+  .container { max-width: 960px; margin: 0 auto; padding: 0 20px; }
+  .container-sm { max-width: 720px; margin: 0 auto; padding: 0 20px; }
+  .container-xs { max-width: 480px; margin: 0 auto; padding: 0 20px; }
+  .row { display: flex; align-items: center; }
+  .between { justify-content: space-between; }
+  .wrap { flex-wrap: wrap; }
+  .gap-1 { gap: 6px; } .gap-2 { gap: 10px; } .gap-3 { gap: 14px; } .gap-4 { gap: 20px; }
+  .icon { display: inline-flex; align-items: center; justify-content: center; line-height: 1; }
+  .pill {
+    display: inline-flex; align-items: center; gap: 4px; border-radius: 3px;
+    padding: 2px 8px; font-size: 12px; font-weight: 500; border: 1px solid var(--line); color: var(--ink-muted);
+  }
+  .pill.coral { background: var(--coral-dim); color: var(--coral); border-color: var(--coral); }
+  .pill.mint { background: var(--mint-dim); color: var(--mint); border-color: var(--mint); }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    border: none; cursor: pointer; border-radius: 3px; font-size: 14px; font-weight: 500;
+    padding: 10px 18px; font-family: var(--font-display);
+  }
+  .btn-coral { background: var(--coral); color: #fff; }
+  .btn-ink { background: var(--ink); color: var(--bg); }
+  .btn-outline { background: transparent; border: 1px solid var(--line); color: var(--ink); }
+  .card {
+    border: 1px solid var(--line); background: var(--surface); border-radius: 3px; padding: 16px;
+    display: flex; flex-direction: column; gap: 12px; text-align: left; cursor: pointer; width: 100%;
+  }
+  .card:hover { border-color: var(--ink-muted); }
+  .grid { display: grid; gap: 12px; }
+  .grid-2 { grid-template-columns: repeat(2, 1fr); }
+  .grid-3 { grid-template-columns: repeat(3, 1fr); }
+  @media (max-width: 720px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+  @media (min-width: 721px) and (max-width: 900px) { .grid-3 { grid-template-columns: repeat(2,1fr); } }
+
+  /* Nav */
+  .navbar {
+    position: sticky; top: 0; z-index: 30; display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 20px; border-bottom: 1px solid var(--line); background: color-mix(in srgb, var(--bg) 90%, transparent);
+    backdrop-filter: blur(6px);
+  }
+  .brand { display: flex; align-items: center; gap: 8px; background: none; border: none; cursor: pointer; color: var(--ink); }
+  .brand span { font-size: 18px; font-weight: 600; letter-spacing: -0.02em; }
+  .nav-link { display: none; align-items: center; gap: 6px; font-size: 14px; padding: 6px 12px; border-radius: 3px; border: none; background: none; cursor: pointer; color: var(--ink-muted); }
+  @media (min-width: 640px) { .nav-link { display: inline-flex; } .nav-cta { display: inline-flex !important; } }
+  .nav-link.active { background: var(--surface-alt); color: var(--ink); }
+  .badge-count { margin-left: 4px; border-radius: 999px; font-size: 10px; padding: 0 6px; background: var(--surface-alt); color: var(--ink); }
+  .icon-btn { padding: 8px; border-radius: 3px; border: 1px solid var(--line); background: none; cursor: pointer; color: var(--ink); }
+  .nav-cta { display: none; }
+
+  /* Hero */
+  .hero { padding: 64px 20px 64px; max-width: 720px; margin: 0 auto; }
+  .hero h1 { font-size: 40px; line-height: 1.05; letter-spacing: -0.02em; font-weight: 600; margin: 0; }
+  @media (min-width: 640px) { .hero h1 { font-size: 60px; } .hero { padding-top: 96px; } }
+  .hero p { margin-top: 18px; font-size: 16px; color: var(--ink-muted); max-width: 520px; }
+  @media (min-width: 640px) { .hero p { font-size: 18px; } }
+  .search-form { margin-top: 34px; display: flex; flex-direction: column; gap: 8px; }
+  @media (min-width: 640px) { .search-form { flex-direction: row; gap: 0; } }
+  .search-box { flex: 1; display: flex; align-items: center; gap: 10px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 3px; background: var(--surface); }
+  .search-box input { flex: 1; border: none; outline: none; background: transparent; font-size: 16px; color: var(--ink); }
+  .search-form button.btn { padding: 14px 24px; }
+  @media (min-width: 640px) { .search-form button.btn { margin-left: 8px; } }
+  .examples { margin-top: 16px; display: flex; flex-wrap: wrap; gap: 8px; }
+  .example-chip { font-size: 14px; padding: 6px 12px; border-radius: 3px; border: 1px solid var(--line); background: none; cursor: pointer; color: var(--ink-muted); }
+
+  /* Sections */
+  .section { max-width: 960px; margin: 0 auto; padding: 56px 20px; border-top: 1px solid var(--line); }
+  .section h2 { font-size: 20px; font-weight: 600; margin: 0; }
+  .section-head { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; margin-bottom: 4px; }
+  .section-sub { font-size: 12px; color: var(--ink-muted); margin: 6px 0 22px; }
+  .filter-chip { font-size: 12px; padding: 4px 10px; border-radius: 3px; border: 1px solid var(--line); background: none; cursor: pointer; color: var(--ink-muted); }
+  .filter-chip.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .product-icon { width: 40px; height: 40px; border-radius: 3px; background: var(--surface-alt); display: flex; align-items: center; justify-content: center; font-size: 18px; }
+  .card-name { font-size: 14px; font-weight: 500; }
+  .card-attrs { font-size: 12px; color: var(--ink-muted); margin-top: 2px; }
+  .card-price { font-family: var(--font-mono); font-size: 14px; font-weight: 600; margin-top: auto; }
+
+  .steps { display: grid; gap: 32px; }
+  @media (min-width: 640px) { .steps { grid-template-columns: repeat(3,1fr); } }
+  .step-num { font-family: var(--font-mono); font-size: 14px; color: var(--ink-muted); }
+  .step-title { font-size: 18px; font-weight: 600; margin: 8px 0 6px; }
+  .step-body { font-size: 14px; color: var(--ink-muted); line-height: 1.6; margin: 0; }
+
+  .trust { display: grid; gap: 24px; }
+  @media (min-width: 640px) { .trust { grid-template-columns: repeat(3,1fr); } }
+  .trust-item { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; color: var(--ink-muted); line-height: 1.6; }
+
+  /* Understanding / results-list */
+  .understanding { text-align: center; padding: 96px 20px; }
+  .dots { display: flex; justify-content: center; gap: 6px; margin: 16px 0; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--coral); animation: bounce 1s infinite; }
+  @keyframes bounce { 0%,100% { transform: translateY(0); opacity: .4; } 50% { transform: translateY(-6px); opacity: 1; } }
+
+  /* Searching */
+  .searching { text-align: center; padding: 80px 20px; max-width: 480px; margin: 0 auto; }
+  .stopwatch { font-family: var(--font-mono); font-size: 48px; font-weight: 600; color: var(--coral); margin: 8px 0; }
+  .store-rows { display: flex; flex-direction: column; gap: 8px; text-align: left; margin-top: 24px; }
+  .store-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; border-radius: 3px; border: 1px solid var(--line); background: var(--surface); }
+  .store-row.winner { border-color: var(--coral); }
+  .store-placeholder { height: 40px; border-radius: 3px; border: 1px dashed var(--line); }
+
+  /* Results */
+  .results { max-width: 960px; margin: 0 auto; padding: 40px 20px 60px; display: flex; flex-direction: column; gap: 40px; }
+  .results-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; }
+  .product-icon-lg { width: 64px; height: 64px; border-radius: 3px; background: var(--surface-alt); border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; font-size: 26px; flex-shrink: 0; }
+  .product-title { font-size: 26px; font-weight: 600; margin: 0; }
+  @media (min-width: 640px) { .product-title { font-size: 30px; } }
+
+  .best-deal-card { border: 1px solid var(--coral); border-radius: 3px; padding: 24px; display: flex; flex-direction: column; gap: 20px; }
+  @media (min-width: 640px) { .best-deal-card { flex-direction: row; align-items: center; } }
+  .score-ring { position: relative; width: 88px; height: 88px; flex-shrink: 0; }
+  .score-ring span { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 20px; }
+  .best-deal-price { font-family: var(--font-mono); font-size: 32px; font-weight: 600; }
+  @media (min-width: 640px) { .best-deal-price { font-size: 36px; } }
+  .best-deal-meta { display: flex; flex-wrap: wrap; gap: 16px; font-size: 14px; color: var(--ink-muted); margin-top: 12px; }
+
+  .savings-banner { background: var(--surface-alt); border-radius: 3px; padding: 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+  .savings-amount { font-family: var(--font-mono); color: var(--mint); font-size: 18px; font-weight: 600; }
+
+  .comparison-table th { text-align: left; font-weight: 500; padding: 8px 12px 8px 0; color: var(--ink-muted); border-bottom: 1px solid var(--line); font-size: 14px; }
+  .comparison-table th.num { text-align: right; }
+  .comparison-table td { padding: 12px; border-bottom: 1px solid var(--line); font-size: 14px; vertical-align: top; }
+  .comparison-table td.num { text-align: right; font-family: var(--font-mono); }
+  .table-wrap { overflow-x: auto; }
+  .store-pills { display: flex; gap: 6px; margin-top: 6px; }
+  .sort-select { font-size: 14px; padding: 6px 10px; border-radius: 3px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); }
+
+  .panel { border: 1px solid var(--line); border-radius: 3px; padding: 20px; }
+  .panel-title { display: flex; align-items: center; gap: 8px; font-size: 16px; font-weight: 600; margin: 0 0 6px; }
+  .alert-input { flex: 1; display: flex; align-items: center; gap: 4px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 3px; }
+  .alert-input input { border: none; outline: none; background: transparent; font-family: var(--font-mono); font-size: 14px; width: 100%; color: var(--ink); }
+
+  /* Dashboard */
+  .stat-label { font-size: 12px; color: var(--ink-muted); }
+  .stat-value { font-family: var(--font-mono); font-size: 16px; font-weight: 500; margin-top: 2px; }
+  .stats-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 24px; }
+  @media (min-width: 640px) { .stats-grid { grid-template-columns: repeat(4,1fr); } }
+  .list-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px; border: 1px solid var(--line); border-radius: 3px; }
+  .list-row-btn { display: flex; align-items: center; gap: 12px; background: none; border: none; cursor: pointer; text-align: left; flex: 1; color: inherit; }
+  .remove-btn { background: none; border: none; cursor: pointer; color: var(--ink-muted); }
+
+  footer { border-top: 1px solid var(--line); padding: 40px 20px; margin-top: 40px; }
+  .footer-inner { max-width: 960px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+  @media (min-width: 640px) { .footer-inner { flex-direction: row; align-items: center; justify-content: space-between; } }
+  .footer-note { font-size: 12px; color: var(--ink-muted); max-width: 420px; }
+  @media (min-width: 640px) { .footer-note { text-align: right; } }
+
+  h1,h2,h3 { font-family: var(--font-display); }
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+/* ======================================================================
+   ICONS — plain glyphs standing in for a proper icon set. Simple choice
+   for a dependency-free vanilla build.
+   ====================================================================== */
+const ICONS = {
+  search: "🔍", moon: "🌙", sun: "☀️", check: "✓", link: "↗", sparkles: "✦",
+  dashboard: "▦", star: "★", bookmark: "🔖", bookmarkFilled: "🔖", bell: "🔔",
+  shield: "🛡", clock: "🕐", close: "✕",
+  smartphone: "📱", laptop: "💻", headphones: "🎧", tv: "📺", watch: "⌚",
+  gamepad: "🎮", tablet: "📱", camera: "📷",
+};
+function icon(name) { return `<span class="icon">${ICONS[name] || ""}</span>`; }
+
+/* ======================================================================
+   SIMULATED BACKEND — deterministic seeded generator standing in for
+   real retailer APIs. Same product always returns the same numbers.
+   ====================================================================== */
+function seededRand(seedStr) {
+  let h = 1779033703 ^ seedStr.length;
+  for (let i = 0; i < seedStr.length; i++) {
+    h = Math.imul(h ^ seedStr.charCodeAt(i), 3432918353);
+    h = (h << 13) | (h >>> 19);
+  }
+  return function () {
+    h = Math.imul(h ^ (h >>> 16), 2246822507);
+    h = Math.imul(h ^ (h >>> 13), 3266489909);
+    h ^= h >>> 16;
+    return (h >>> 0) / 4294967296;
+  };
+}
+
+const STORES = ["Amazon", "Noon", "Jumia", "B.TECH", "2B"];
+
+const STORE_LINKS = {
+  Amazon: (q) => `https://www.amazon.eg/s?k=${encodeURIComponent(q)}`,
+  Noon: () => `https://www.noon.com/egypt-en/`,
+  Jumia: () => `https://www.jumia.com.eg/`,
+  "B.TECH": () => `https://btech.com/en`,
+  "2B": () => `https://2b.com.eg/en`,
+};
+
+const WARRANTY = {
+  Amazon: "Official manufacturer warranty",
+  Noon: "Marketplace seller, no official warranty",
+  Jumia: "Local distributor warranty, 6 months",
+  "B.TECH": "Official warranty with in-store support",
+  "2B": "Official warranty, 12 months",
+};
+
+function genRetailers(basePrice, seedStr) {
+  const rand = seededRand(seedStr);
+  const raw = STORES.map((store) => {
+    const priceVar = (rand() - 0.45) * 0.16;
+    const price = Math.max(50, Math.round((basePrice * (1 + priceVar)) / 10) * 10);
+    const shipping = rand() < 0.5 ? 0 : Math.round((40 + rand() * 160) / 10) * 10;
+    const delivery = Math.floor(rand() * 5);
+    const rating = Math.round((3.6 + rand() * 1.3) * 10) / 10;
+    return { store, price, shipping, delivery, rating };
+  });
+  const totals = raw.map((r) => r.price + r.shipping);
+  const minT = Math.min(...totals);
+  const maxT = Math.max(...totals);
+  return raw.map((r, i) => {
+    const total = totals[i];
+    const priceScore = maxT === minT ? 88 : 100 - ((total - minT) / (maxT - minT)) * 38;
+    const deliveryPenalty = r.delivery * 3;
+    const ratingBonus = (r.rating - 4) * 12;
+    const score = Math.max(52, Math.min(98, Math.round(priceScore - deliveryPenalty + ratingBonus)));
+    return { ...r, score };
+  });
+}
+
+function genHistory(basePrice, seedStr) {
+  const rand = seededRand(seedStr + "-hist");
+  const labels = ["30d","27d","24d","21d","18d","15d","12d","9d","6d","3d","Today"];
+  let price = Math.round((basePrice * (1.05 + rand() * 0.08)) / 10) * 10;
+  const prices = [];
+  for (let i = 0; i < labels.length; i++) {
+    if (i === labels.length - 1) { prices.push(basePrice); break; }
+    prices.push(price);
+    const drop = Math.round((basePrice * 0.006 + rand() * basePrice * 0.018) / 10) * 10;
+    price = Math.max(basePrice, price - drop);
+  }
+  return { labels, prices };
+}
+
+function slugify(s) { return s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, ""); }
+
+const CATEGORY_DEFS = {
+  Phones: {
+    icon: "smartphone",
+    variants: [{ label: "128GB", mult: 1 }, { label: "256GB", mult: 1.12 }, { label: "512GB", mult: 1.3 }],
+    colors: ["Black", "White", "Blue"],
+    items: [
+      ["Apple","iPhone 17 Pro Max",73999],["Apple","iPhone 17 Pro",62999],["Apple","iPhone 17",47999],
+      ["Apple","iPhone 17 Air",54999],["Apple","iPhone 16",39999],["Apple","iPhone 16 Plus",44999],
+      ["Samsung","Galaxy S25 Ultra",62999],["Samsung","Galaxy S25+",48999],["Samsung","Galaxy S25",39999],
+      ["Samsung","Galaxy Z Fold 7",84999],["Samsung","Galaxy Z Flip 7",52999],["Samsung","Galaxy A56",16999],
+      ["Xiaomi","15 Ultra",44999],["Xiaomi","15",34999],["Xiaomi","Redmi Note 14 Pro",12999],
+      ["Google","Pixel 10 Pro",42999],["Google","Pixel 10",33999],["Google","Pixel 9a",18999],
+      ["OnePlus","13",34999],["OnePlus","13R",24999],
+      ["Huawei","Pura 70 Pro",39999],["Oppo","Find X8",32999],["Honor","Magic 7 Pro",33999],
+    ],
+  },
+  Laptops: {
+    icon: "laptop",
+    variants: [{ label: "256GB SSD", mult: 1 }, { label: "512GB SSD", mult: 1.15 }, { label: "1TB SSD", mult: 1.35 }],
+    colors: ["Silver", "Space Gray", "Black"],
+    items: [
+      ["Apple","MacBook Pro M5 14-inch",89999],["Apple","MacBook Pro M5 16-inch",119999],
+      ["Apple","MacBook Air M4 13-inch",54999],["Apple","MacBook Air M4 15-inch",64999],
+      ["Dell","XPS 14",68999],["Dell","XPS 16",84999],["Dell","Inspiron 15",34999],
+      ["HP","Spectre x360 14",72999],["HP","Pavilion 15",36999],
+      ["Lenovo","ThinkPad X1 Carbon",79999],["Lenovo","Legion Pro 7",94999],["Lenovo","IdeaPad Slim 5",38999],
+      ["Asus","ROG Strix G16",76999],["Asus","Zenbook 14 OLED",49999],
+      ["Acer","Swift Go 14",42999],["Acer","Predator Helios 16",89999],
+      ["MSI","Stealth 16",99999],["Microsoft","Surface Laptop 7",64999],
+    ],
+  },
+  Audio: {
+    icon: "headphones",
+    variants: [{ label: null, mult: 1 }],
+    colors: ["Black", "White", "Blue", "Silver"],
+    items: [
+      ["Sony","WH-1000XM6",12999],["Sony","WF-1000XM6",8999],["Sony","SRS-XB100",2999],
+      ["Apple","AirPods Pro 3",8999],["Apple","AirPods Max 2",19999],["Apple","AirPods 4",6499],
+      ["Bose","QuietComfort Ultra",14999],["Bose","SoundLink Max",9999],
+      ["JBL","Charge 6",6999],["JBL","Flip 7",4499],["JBL","Tour One M3",11999],
+      ["Samsung","Galaxy Buds 3 Pro",7999],["Sennheiser","Momentum 4",13999],
+      ["Anker","Soundcore Space One",5999],["Beats","Studio Pro",10999],
+      ["Marshall","Emberton III",6999],["Sonos","Era 300",15999],
+      ["Bang & Olufsen","Beoplay EX",16999],["Skullcandy","Crusher ANC 2",6499],["Nothing","Ear 3",6999],
+    ],
+  },
+  TVs: {
+    icon: "tv",
+    variants: [{ label: "Standalone", mult: 1 }, { label: "With Wall Mount Bundle", mult: 1.05 }],
+    colors: ["Black"],
+    items: [
+      ["Samsung","55\" Neo QLED 4K",34999],["Samsung","65\" Neo QLED 4K",54999],["Samsung","75\" Crystal UHD",49999],
+      ["Samsung","85\" Neo QLED 8K",149999],
+      ["LG","55\" OLED evo",44999],["LG","65\" OLED evo",64999],["LG","55\" QNED",32999],["LG","77\" OLED G4",119999],
+      ["Sony","65\" Bravia XR",74999],["Sony","55\" Bravia 5",39999],
+      ["TCL","55\" QLED",22999],["TCL","65\" Mini LED",38999],
+      ["Hisense","55\" U7",27999],["Hisense","65\" U8",42999],
+      ["Toshiba","43\" Fire TV",14999],
+    ],
+  },
+  Wearables: {
+    icon: "watch",
+    variants: [{ label: "41mm", mult: 1 }, { label: "45mm", mult: 1.08 }],
+    colors: ["Black", "Silver", "Rose Gold"],
+    items: [
+      ["Apple","Watch Series 11",15999],["Apple","Watch Ultra 3",29999],["Apple","Watch SE 3",9999],
+      ["Samsung","Galaxy Watch 8",12999],["Samsung","Galaxy Watch Ultra",18999],["Samsung","Galaxy Fit 3",2999],
+      ["Garmin","Fenix 8",32999],["Garmin","Venu 4",14999],["Garmin","Instinct 3",8999],
+      ["Huawei","Watch GT 6",8999],["Amazfit","GTR 5",5999],["Fitbit","Charge 7",4999],
+      ["Google","Pixel Watch 4",13999],["Xiaomi","Smart Band 9",1999],["Oura","Ring 4",11999],
+    ],
+  },
+  Gaming: {
+    icon: "gamepad",
+    variants: [{ label: null, mult: 1 }],
+    colors: ["Black", "White", "Red"],
+    items: [
+      ["Sony","PlayStation 5 Pro",27999],["Sony","PlayStation 5 Digital",19999],["Sony","DualSense Edge Controller",3999],
+      ["Microsoft","Xbox Series X",22999],["Microsoft","Xbox Series S",12999],["Microsoft","Xbox Elite Controller 2",4999],
+      ["Nintendo","Switch 2",16999],
+      ["Logitech","G Pro X Superlight 2",3999],["Logitech","G920 Racing Wheel",9999],
+      ["Razer","DeathAdder V3",2499],["Razer","BlackShark V2 Pro",6999],
+      ["SteelSeries","Arctis Nova Pro",8999],["Asus","ROG Ally X",26999],["Valve","Steam Deck OLED",21999],
+    ],
+  },
+  Tablets: {
+    icon: "tablet",
+    variants: [{ label: "128GB", mult: 1 }, { label: "256GB", mult: 1.12 }, { label: "512GB", mult: 1.3 }],
+    colors: ["Silver", "Space Gray", "Blue"],
+    items: [
+      ["Apple","iPad Pro M5 11-inch",42999],["Apple","iPad Pro M5 13-inch",54999],
+      ["Apple","iPad Air M3",22999],["Apple","iPad 11th Gen",14999],["Apple","iPad mini 7",17999],
+      ["Samsung","Galaxy Tab S11 Ultra",39999],["Samsung","Galaxy Tab S11+",29999],["Samsung","Galaxy Tab A10",8999],
+      ["Lenovo","Tab P12",12999],["Lenovo","Yoga Tab 13",16999],
+      ["Huawei","MatePad Pro 13.2",19999],["Huawei","MatePad 11.5",10999],
+      ["Xiaomi","Pad 7 Pro",15999],["Microsoft","Surface Pro 11",44999],["Amazon","Fire Max 12",8999],
+    ],
+  },
+  Cameras: {
+    icon: "camera",
+    variants: [{ label: "Body Only", mult: 1 }, { label: "With Kit Lens", mult: 1.15 }],
+    colors: ["Black", "Silver"],
+    items: [
+      ["Sony","Alpha A7 IV",84999],["Sony","Alpha A7C II",69999],["Sony","ZV-E10 II",32999],
+      ["Canon","EOS R6 Mark II",79999],["Canon","EOS R8",49999],["Canon","PowerShot G7 X Mark III",24999],
+      ["Nikon","Z6 III",74999],["Nikon","Z50 II",34999],
+      ["Fujifilm","X-T5",64999],["Fujifilm","X100VI",54999],
+      ["Panasonic","Lumix S5 IIX",69999],
+      ["GoPro","Hero 13 Black",14999],["DJI","Osmo Pocket 3",16999],
+    ],
+  },
+};
+
+function buildCatalog() {
+  const products = {};
+  Object.entries(CATEGORY_DEFS).forEach(([category, def]) => {
+    def.items.forEach(([brand, model, base]) => {
+      def.variants.forEach((variant) => {
+        def.colors.forEach((color) => {
+          const name = `${brand} ${model}`;
+          const attrs = [variant.label, color, "New"].filter(Boolean);
+          const rawId = slugify(`${name}-${variant.label || ""}-${color}`);
+          let id = rawId, n = 1;
+          while (products[id]) id = `${rawId}-${n++}`;
+          const basePrice = Math.round((base * variant.mult) / 10) * 10;
+          products[id] = {
+            id, name, brand, category, attrs,
+            icon: def.icon,
+            checkedMinsAgo: 1 + Math.floor(seededRand(id + "-mins")() * 20),
+            retailers: genRetailers(basePrice, id),
+            history: genHistory(basePrice, id),
+          };
+        });
+      });
+    });
+  });
+  return products;
+}
+
+const PRODUCTS = buildCatalog();
+const CATALOG_LIST = Object.values(PRODUCTS);
+const CATEGORIES = ["All", ...Object.keys(CATEGORY_DEFS)];
+
+function annotate(product) {
+  const rows = product.retailers.map((r) => ({ ...r, total: r.price + r.shipping }));
+  const bestDeal = rows.reduce((a, b) => (b.score > a.score ? b : a));
+  const cheapest = rows.reduce((a, b) => (b.total < a.total ? b : a));
+  const fastest = rows.reduce((a, b) => (b.delivery < a.delivery ? b : a));
+  return rows.map((r) => ({
+    ...r,
+    isBestDeal: r.store === bestDeal.store,
+    isCheapest: r.store === cheapest.store,
+    isFastest: r.store === fastest.store,
+  }));
+}
+
+function searchCatalog(query, limit = 30) {
+  const q = query.toLowerCase().trim();
+  if (!q) return [];
+  const terms = q.split(/\s+/).filter(Boolean);
+  const scored = [];
+  for (const p of CATALOG_LIST) {
+    const haystack = `${p.brand} ${p.name} ${p.category} ${p.attrs.join(" ")}`.toLowerCase();
+    let score = 0;
+    for (const t of terms) if (haystack.includes(t)) score += t.length;
+    if (score > 0) scored.push({ p, score });
+  }
+  scored.sort((a, b) => b.score - a.score || a.p.name.localeCompare(b.p.name));
+  return scored.slice(0, limit).map((s) => s.p);
+}
+
+function getRecommendations(limit = 6) {
+  const withSavings = CATALOG_LIST.map((p) => {
+    const rows = annotate(p);
+    const best = rows.find((r) => r.isBestDeal);
+    const max = Math.max(...rows.map((r) => r.total));
+    return { p, pct: (max - best.total) / max };
+  });
+  withSavings.sort((a, b) => b.pct - a.pct);
+  return withSavings.slice(0, limit).map((x) => x.p);
+}
+
+function simulateApi(fn, delay = 420) {
+  return new Promise((resolve) => setTimeout(() => resolve(fn()), delay + Math.random() * 260));
+}
+
+const egp = (n) => `EGP ${n.toLocaleString("en-US")}`;
+const deliveryLabel = (d) => (d === 0 ? "Same day" : d === 1 ? "Tomorrow" : `${d} days`);
+const esc = (s) => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;");
+
+/* ======================================================================
+   STATE
+   ====================================================================== */
+const state = {
+  isDark: false,
+  view: "home",
+  query: "",
+  searchResults: [],
+  activeProductId: null,
+  savedIds: [],
+  alerts: [],
+  searchHistory: [],
+  catalogFilter: "All",
+  sortMode: "best",
+  alertCreated: false,
+  alertTarget: 0,
+};
+
+function setState(patch) { Object.assign(state, patch); render(); }
+
+/* ======================================================================
+   SMALL RENDER HELPERS
+   ====================================================================== */
+function scoreRingHtml(score, size) {
+  size = size || 88;
+  const stroke = 7, r = (size - stroke) / 2, c = 2 * Math.PI * r, offset = c * (1 - score / 100);
+  return `<div class="score-ring" style="width:${size}px;height:${size}px;">
+    <svg width="${size}" height="${size}" style="transform:rotate(-90deg)">
+      <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" style="stroke:var(--line)" stroke-width="${stroke}"/>
+      <circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" style="stroke:var(--coral)" stroke-width="${stroke}"
+        stroke-dasharray="${c}" stroke-dashoffset="${offset}" stroke-linecap="round"/>
+    </svg>
+    <span class="mono tabular">${score}</span>
+  </div>`;
+}
+
+function logoSvg(size) {
+  size = size || 22;
+  return `<svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none">
+    <path d="M4 5l7 7-7 7" style="stroke:var(--coral)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M13 5l7 7-7 7" style="stroke:var(--coral)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>`;
+}
+
+function priceHistorySvg(history) {
+  const w = 600, h = 180, padL = 34, padR = 8, padT = 10, padB = 20;
+  const prices = history.prices;
+  const min = Math.min(...prices), max = Math.max(...prices);
+  const lo = min - (max - min || 1000) * 0.15, hi = max + (max - min || 1000) * 0.15;
+  const n = prices.length;
+  const x = (i) => padL + (i / (n - 1)) * (w - padL - padR);
+  const y = (v) => padT + (1 - (v - lo) / (hi - lo)) * (h - padT - padB);
+  const points = prices.map((p, i) => `${x(i).toFixed(1)},${y(p).toFixed(1)}`).join(" ");
+  const grid = [0, 0.5, 1].map((f) => {
+    const gy = padT + f * (h - padT - padB);
+    const val = Math.round(hi - f * (hi - lo));
+    return `<line x1="${padL}" y1="${gy}" x2="${w-padR}" y2="${gy}" style="stroke:var(--line)" stroke-dasharray="3,3"/>
+      <text x="${padL-6}" y="${gy+4}" text-anchor="end" font-size="10" style="fill:var(--ink-muted)" font-family="var(--font-mono)">${Math.round(val/1000)}k</text>`;
+  }).join("");
+  const xLabels = history.labels.map((l, i) =>
+    `<text x="${x(i).toFixed(1)}" y="${h-4}" text-anchor="middle" font-size="10" style="fill:var(--ink-muted)" font-family="var(--font-mono)">${l}</text>`
+  ).join("");
+  return `<svg viewBox="0 0 ${w} ${h}" style="width:100%;height:180px;display:block;">
+    ${grid}
+    <polyline points="${points}" fill="none" style="stroke:var(--ink)" stroke-width="2"/>
+    ${xLabels}
+  </svg>`;
+}
+
+function productCardHtml(p, badgeHtml) {
+  const rows = annotate(p);
+  const best = rows.find((r) => r.isBestDeal);
+  return `<button class="card" data-action="pick" data-id="${p.id}" data-name="${esc(p.name)}">
+    <div class="row between">
+      <div class="product-icon">${icon(p.icon)}</div>
+      ${badgeHtml || ""}
+    </div>
+    <div>
+      <div class="card-name">${esc(p.name)}</div>
+      <div class="card-attrs">${esc(p.attrs.join(", "))}</div>
+    </div>
+    <div class="card-price mono tabular">from ${egp(best.total)}</div>
+  </button>`;
+}
+
+/* ======================================================================
+   VIEW: HOME
+   ====================================================================== */
+function heroHtml() {
+  const examples = ["iPhone", "Gaming laptop", "Wireless earbuds", "Smart watch", "4K TV"];
+  return `
+  <section class="hero">
+    <h1>The best price, found fast.</h1>
+    <p>Search Quick's catalog of nearly ${Math.round(CATALOG_LIST.length/10)*10} products and see every store's
+    price side by side, before you'd even open a second tab.</p>
+    <form class="search-form" data-form="search">
+      <div class="search-box">
+        ${icon("search")}
+        <input type="text" name="q" placeholder="What are you looking for?" value="${esc(state.query)}" autocomplete="off" />
+      </div>
+      <button type="submit" class="btn btn-coral">Compare now</button>
+    </form>
+    <div class="examples">
+      ${examples.map((ex) => `<button class="example-chip" data-action="search-text" data-q="${esc(ex)}">${esc(ex)}</button>`).join("")}
+    </div>
+  </section>`;
+}
+
+function catalogSectionHtml() {
+  const filtered = state.catalogFilter === "All" ? CATALOG_LIST : CATALOG_LIST.filter((p) => p.category === state.catalogFilter);
+  const items = filtered.slice(0, 9);
+  return `
+  <section class="section">
+    <div class="section-head">
+      <h2>Popular right now</h2>
+      <div class="row wrap gap-1">
+        ${CATEGORIES.map((c) => `<button class="filter-chip ${c === state.catalogFilter ? "active" : ""}" data-action="filter-cat" data-cat="${esc(c)}">${esc(c)}</button>`).join("")}
+      </div>
+    </div>
+    <p class="section-sub">${CATALOG_LIST.length} products across ${CATEGORIES.length - 1} categories — search above to see the rest.</p>
+    <div class="grid grid-3">${items.map((p) => productCardHtml(p)).join("")}</div>
+  </section>`;
+}
+
+function recommendedSectionHtml() {
+  const items = getRecommendations(6);
+  return `
+  <section class="section">
+    <h2>Quick's picks</h2>
+    <p class="section-sub">The biggest gap between the cheapest and priciest listing right now.</p>
+    <div class="grid grid-3">
+      ${items.map((p) => {
+        const rows = annotate(p);
+        const best = rows.find((r) => r.isBestDeal);
+        const max = Math.max(...rows.map((r) => r.total));
+        const pct = Math.round(((max - best.total) / max) * 100);
+        return productCardHtml(p, `<span class="mono tabular" style="color:var(--mint);font-size:12px;font-weight:600;">-${pct}%</span>`);
+      }).join("")}
+    </div>
+  </section>`;
+}
+
+function howItWorksHtml() {
+  const steps = [
+    ["01","Ask","Type what you want in plain language. No model numbers required."],
+    ["02","Quick checks everywhere at once","Every major store, compared in under a second, not five open tabs."],
+    ["03","Buy the winner","See which offer is genuinely worth it: price, shipping, warranty, and delivery together."],
+  ];
+  return `
+  <section class="section">
+    <div class="steps">
+      ${steps.map(([n,t,b]) => `<div><div class="step-num mono">${n}</div><div class="step-title">${t}</div><p class="step-body">${b}</p></div>`).join("")}
+    </div>
+  </section>`;
+}
+
+function trustNoteHtml() {
+  const items = [
+    ["shield","Every total already includes shipping, so there's no surprise math at checkout."],
+    ["clock","Prices are timestamped, not stale. You always see exactly when they were checked."],
+    ["check","This prototype runs on a simulated catalog, clearly labeled and never passed off as live."],
+  ];
+  return `
+  <section class="section" style="padding-top:0;border-top:none;">
+    <div class="trust">
+      ${items.map(([ic,t]) => `<div class="trust-item">${icon(ic)}<span>${t}</span></div>`).join("")}
+    </div>
+  </section>`;
+}
+
+/* ======================================================================
+   VIEW: SEARCH LOADING + RESULTS LIST
+   ====================================================================== */
+function understandingHtml() {
+  return `
+  <section class="understanding">
+    <div class="muted" style="font-size:14px;margin-bottom:4px;">"${esc(state.query)}"</div>
+    <div class="dots">
+      <span class="dot" style="animation-delay:0s"></span>
+      <span class="dot" style="animation-delay:.15s"></span>
+      <span class="dot" style="animation-delay:.3s"></span>
+    </div>
+    <div class="muted" style="font-size:14px;">Searching Quick's catalog</div>
+  </section>`;
+}
+
+function resultsListHtml() {
+  const results = state.searchResults;
+  return `
+  <section class="container" style="padding-top:40px;padding-bottom:40px;">
+    <button data-action="go-home" class="muted" style="background:none;border:none;cursor:pointer;font-size:14px;margin-bottom:24px;padding:0;">Back to search</button>
+    <h2 style="font-size:20px;font-weight:600;margin:0;">
+      ${results.length > 0 ? `${results.length} result${results.length === 1 ? "" : "s"} for "${esc(state.query)}"` : `No matches for "${esc(state.query)}"`}
+    </h2>
+    ${results.length === 0
+      ? `<p class="muted" style="font-size:14px;margin-top:12px;">Try a broader term like a brand or category — Quick's catalog covers phones, laptops, audio, TVs, wearables, gaming, tablets, and cameras.</p>`
+      : `<div class="grid grid-3" style="margin-top:24px;">${results.map((p) => productCardHtml(p)).join("")}</div>`}
+  </section>`;
+}
+
+/* ======================================================================
+   VIEW: SEARCHING (stopwatch + retailer reveal)
+   ====================================================================== */
+const SEARCH_DURATION = 900;
+let searchAnim = null;
+
+function searchingHtml(product) {
+  return `
+  <section class="searching">
+    <div class="muted" style="font-size:14px;margin-bottom:4px;">"${esc(state.query)}"</div>
+    <div class="stopwatch tabular" id="stopwatch">0.00s</div>
+    <div class="muted" style="font-size:14px;margin-bottom:24px;" id="search-phase">Checking every store</div>
+    <div class="store-rows" id="store-rows"></div>
+  </section>`;
+}
+
+function startSearchAnimation(product) {
+  const rows = annotate(product);
+  const total = rows.length;
+  const stopwatchEl = document.getElementById("stopwatch");
+  const phaseEl = document.getElementById("search-phase");
+  const rowsEl = document.getElementById("store-rows");
+  const start = performance.now();
+
+  function frame(now) {
+    const t = Math.min(now - start, SEARCH_DURATION);
+    stopwatchEl.textContent = (t / 1000).toFixed(2) + "s";
+    phaseEl.textContent = t < SEARCH_DURATION * 0.4 ? "Checking every store" : t < SEARCH_DURATION * 0.8 ? "Comparing totals" : "Ranking the best deal";
+    const revealed = Math.min(total, Math.ceil((t / SEARCH_DURATION) * total));
+    let html = "";
+    for (let i = 0; i < revealed; i++) {
+      const r = rows[i];
+      const isLast = i === revealed - 1 && revealed === total;
+      html += `<div class="store-row ${isLast ? "winner" : ""}">
+        <span style="font-size:14px;font-weight:500;">${esc(r.store)}</span>
+        <span class="mono tabular muted" style="font-size:14px;">${egp(r.total)}</span>
+      </div>`;
+    }
+    for (let i = 0; i < total - revealed; i++) html += `<div class="store-placeholder"></div>`;
+    rowsEl.innerHTML = html;
+
+    if (t < SEARCH_DURATION) {
+      searchAnim = requestAnimationFrame(frame);
+    } else {
+      setTimeout(() => setState({ view: "results" }), 300);
+    }
+  }
+  searchAnim = requestAnimationFrame(frame);
+}
+
+/* ======================================================================
+   VIEW: RESULTS
+   ====================================================================== */
+function bestDealCardHtml(best, productName) {
+  const link = STORE_LINKS[best.store] ? STORE_LINKS[best.store](productName) : null;
+  return `
+  <div class="best-deal-card">
+    ${scoreRingHtml(best.score)}
+    <div style="flex:1;">
+      <span class="pill coral">Best deal</span>
+      <div class="row" style="align-items:baseline;gap:8px;margin-top:8px;">
+        <span class="best-deal-price mono tabular">${egp(best.total)}</span>
+        <span class="muted" style="font-size:14px;">at ${esc(best.store)}</span>
+      </div>
+      <div class="best-deal-meta">
+        <span class="row gap-1">${icon("star")} ${best.rating}</span>
+        <span class="row gap-1">${icon("clock")} ${deliveryLabel(best.delivery)}</span>
+        <span class="row gap-1">${icon("shield")} ${esc(WARRANTY[best.store])}</span>
+      </div>
+    </div>
+    <a class="btn btn-ink" href="${link || "#"}" target="_blank" rel="noopener noreferrer">Open ${esc(best.store)} ${icon("link")}</a>
+  </div>`;
+}
+
+function comparisonTableHtml(rows, productName) {
+  const sorted = [...rows].sort((a, b) => {
+    if (state.sortMode === "cheapest") return a.total - b.total;
+    if (state.sortMode === "fastest") return a.delivery - b.delivery;
+    if (state.sortMode === "rating") return b.rating - a.rating;
+    return b.score - a.score;
+  });
+  const trs = sorted.map((r) => {
+    const link = STORE_LINKS[r.store] ? STORE_LINKS[r.store](productName) : null;
+    const pills = [
+      r.isBestDeal ? `<span class="pill coral">Best deal</span>` : "",
+      r.isCheapest ? `<span class="pill">Cheapest</span>` : "",
+      r.isFastest ? `<span class="pill">Fastest</span>` : "",
+    ].join("");
+    return `<tr>
+      <td>
+        <div style="font-weight:500;">${esc(r.store)}</div>
+        <div class="row gap-1 muted" style="margin-top:4px;">${icon("star")} ${r.rating}</div>
+        <div class="store-pills">${pills}</div>
+      </td>
+      <td class="num">${r.price.toLocaleString("en-US")}</td>
+      <td class="num muted">${r.shipping === 0 ? "Free" : r.shipping.toLocaleString("en-US")}</td>
+      <td class="num" style="font-weight:600;">${r.total.toLocaleString("en-US")}</td>
+      <td class="muted" style="max-width:180px;">${esc(WARRANTY[r.store])}</td>
+      <td class="muted">${deliveryLabel(r.delivery)}</td>
+      <td class="num" style="font-weight:600;color:${r.isBestDeal ? "var(--coral)" : "var(--ink-muted)"};">${r.score}</td>
+      <td style="text-align:right;">${link ? `<a href="${link}" target="_blank" rel="noopener noreferrer" aria-label="Open ${esc(r.store)}">${icon("link")}</a>` : ""}</td>
+    </tr>`;
+  }).join("");
+
+  return `
+  <div>
+    <div class="row between wrap" style="margin-bottom:14px;">
+      <div>
+        <h3 style="font-size:18px;font-weight:600;margin:0;">Every offer, side by side</h3>
+        <p class="muted" style="font-size:12px;margin:4px 0 0;">Simulated prices for this prototype — tap ${icon("link")} to check the real, current price on that store.</p>
+      </div>
+      <select class="sort-select" data-action="sort-select">
+        <option value="best" ${state.sortMode==="best"?"selected":""}>Sort: best value</option>
+        <option value="cheapest" ${state.sortMode==="cheapest"?"selected":""}>Sort: cheapest</option>
+        <option value="fastest" ${state.sortMode==="fastest"?"selected":""}>Sort: fastest delivery</option>
+        <option value="rating" ${state.sortMode==="rating"?"selected":""}>Sort: highest rated</option>
+      </select>
+    </div>
+    <div class="table-wrap">
+      <table class="comparison-table" style="min-width:680px;">
+        <thead><tr>
+          <th>Store</th><th class="num">Price</th><th class="num">Shipping</th><th class="num">Total</th>
+          <th>Warranty</th><th>Delivery</th><th class="num">Score</th><th></th>
+        </tr></thead>
+        <tbody>${trs}</tbody>
+      </table>
+    </div>
+  </div>`;
+}
+
+function alertWidgetHtml(currentPrice) {
+  if (state.alertCreated) {
+    return `<div class="panel">
+      <div class="panel-title">${icon("bell")} Price alert</div>
+      <p class="muted" style="font-size:14px;margin:8px 0 0;">You'll hear from Quick the instant the price drops below
+        <span class="mono" style="color:var(--mint);">${egp(state.alertTarget)}</span>.</p>
+    </div>`;
+  }
+  const suggested = Math.round(currentPrice * 0.95);
+  return `<div class="panel">
+    <div class="panel-title">${icon("bell")} Price alert</div>
+    <p class="muted" style="font-size:14px;margin:8px 0 12px;">Tell Quick to notify you when this drops below</p>
+    <div class="row gap-2">
+      <div class="alert-input"><span class="mono muted" style="font-size:14px;">EGP</span>
+        <input type="number" id="alert-value" value="${suggested}" />
+      </div>
+      <button class="btn btn-ink" data-action="set-alert">Set alert</button>
+    </div>
+  </div>`;
+}
+
+function resultsHtml(product) {
+  const rows = annotate(product);
+  const best = rows.find((r) => r.isBestDeal);
+  const mostExpensive = Math.max(...rows.map((r) => r.total));
+  const savings = mostExpensive - best.total;
+  const savingsPct = ((savings / mostExpensive) * 100).toFixed(1);
+  const history = product.history;
+  const avg = Math.round(history.prices.reduce((a, b) => a + b, 0) / history.prices.length);
+  const current = history.prices[history.prices.length - 1];
+  const lowest = Math.min(...history.prices);
+  const highest = Math.max(...history.prices);
+  const pctBelowAvg = (((avg - current) / avg) * 100).toFixed(1);
+  const isGood = pctBelowAvg > 0;
+  const buyVerdict = best.total <= avg
+    ? `Yes. The price at ${esc(best.store)} is at or below the 30-day average and currently the strongest overall offer.`
+    : `Maybe wait. Prices have been running higher than the 30-day average, so an alert could pay off.`;
+  const saved = state.savedIds.includes(product.id);
+
+  return `
+  <section class="results">
+    <div class="results-head">
+      <div class="row gap-3" style="align-items:flex-start;">
+        <div class="product-icon-lg">${icon(product.icon)}</div>
+        <div>
+          <h2 class="product-title">${esc(product.name)}</h2>
+          <p class="muted" style="font-size:14px;margin:6px 0 0;">${esc(product.attrs.join(", "))}</p>
+          <p class="muted" style="font-size:12px;margin:4px 0 0;">Compared ${rows.length} offers in 0.9 seconds, prices checked ${product.checkedMinsAgo} minutes ago.</p>
+        </div>
+      </div>
+      <button class="icon-btn" data-action="toggle-save" data-id="${product.id}" style="color:var(--coral);">${icon(saved ? "bookmarkFilled" : "bookmark")}</button>
+    </div>
+
+    ${bestDealCardHtml(best, product.name)}
+
+    <div class="savings-banner">
+      <p style="font-size:14px;margin:0;">Most expensive listing: <span class="mono tabular">${egp(mostExpensive)}</span>. Quick's pick: <span class="mono tabular" style="color:var(--mint);">${egp(best.total)}</span>.</p>
+      <span class="savings-amount tabular">Save ${egp(savings)} (${savingsPct}%)</span>
+    </div>
+
+    ${comparisonTableHtml(rows, product.name)}
+
+    <div>
+      <h3 style="font-size:18px;font-weight:600;margin:0 0 12px;">Price history</h3>
+      ${priceHistorySvg(history)}
+      <div class="stats-grid" style="margin-top:16px;">
+        <div><div class="stat-label">Current</div><div class="stat-value tabular">${egp(current)}</div></div>
+        <div><div class="stat-label">Lowest</div><div class="stat-value tabular">${egp(lowest)}</div></div>
+        <div><div class="stat-label">Highest</div><div class="stat-value tabular">${egp(highest)}</div></div>
+        <div><div class="stat-label">30-day avg</div><div class="stat-value tabular">${egp(avg)}</div></div>
+      </div>
+      <p style="font-size:14px;margin-top:12px;color:${isGood ? "var(--mint)" : "var(--ink-muted)"};">
+        ${isGood ? `The current price is ${pctBelowAvg}% below the 30-day average.` : `The current price is at or above the 30-day average. It may be worth setting an alert instead.`}
+      </p>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">${icon("sparkles")} Quick's take</div>
+      <p class="muted" style="font-size:14px;margin:0;">${buyVerdict}</p>
+    </div>
+
+    ${alertWidgetHtml(best.total)}
+  </section>`;
+}
+
+/* ======================================================================
+   VIEW: DASHBOARD
+   ====================================================================== */
+function dashboardHtml() {
+  const totalSavings = CATALOG_LIST.reduce((sum, p) => {
+    const rows = annotate(p);
+    const best = rows.find((r) => r.isBestDeal);
+    const max = Math.max(...rows.map((r) => r.total));
+    return sum + (max - best.total);
+  }, 0);
+
+  const savedRows = state.savedIds.map((id) => {
+    const p = PRODUCTS[id];
+    if (!p) return "";
+    const rows = annotate(p);
+    const best = rows.find((r) => r.isBestDeal);
+    return `<div class="list-row">
+      <button class="list-row-btn" data-action="pick" data-id="${p.id}" data-name="${esc(p.name)}">
+        ${icon(p.icon)}
+        <div>
+          <div style="font-size:14px;font-weight:500;">${esc(p.name)}</div>
+          <div class="mono tabular muted" style="font-size:12px;">best: ${egp(best.total)} at ${esc(best.store)}</div>
+        </div>
+      </button>
+      <button class="remove-btn" data-action="remove-saved" data-id="${p.id}">${icon("close")}</button>
+    </div>`;
+  }).join("");
+
+  const alertRows = state.alerts.map((a) => `<tr>
+    <td>${esc(a.name)}</td>
+    <td class="num">${egp(a.current)}</td>
+    <td class="num">${egp(a.target)}</td>
+    <td style="text-align:right;"><span class="pill ${a.current <= a.target ? "mint" : ""}">${a.current <= a.target ? "Target reached" : "Watching"}</span></td>
+  </tr>`).join("");
+
+  return `
+  <section class="results">
+    <div>
+      <h2 class="product-title">Your dashboard</h2>
+      <p class="muted" style="font-size:14px;margin-top:6px;">Everything you're tracking with Quick, in one place.</p>
+    </div>
+
+    <div class="stats-grid">
+      <div><div class="stat-label">Saved products</div><div class="stat-value tabular">${state.savedIds.length}</div></div>
+      <div><div class="stat-label">Active alerts</div><div class="stat-value tabular">${state.alerts.length}</div></div>
+      <div><div class="stat-label">Searches</div><div class="stat-value tabular">${state.searchHistory.length}</div></div>
+      <div><div class="stat-label">Estimated savings found</div><div class="stat-value tabular" style="color:var(--mint);">${egp(totalSavings)}</div></div>
+    </div>
+
+    <div>
+      <h3 style="font-size:18px;font-weight:600;margin:0 0 12px;">Saved products</h3>
+      ${state.savedIds.length === 0
+        ? `<p class="muted" style="font-size:14px;">Nothing saved yet. Save a product from its results page and Quick will track it here.</p>`
+        : `<div style="display:flex;flex-direction:column;gap:8px;">${savedRows}</div>`}
+    </div>
+
+    <div>
+      <h3 style="font-size:18px;font-weight:600;margin:0 0 12px;">Price alerts</h3>
+      ${state.alerts.length === 0
+        ? `<p class="muted" style="font-size:14px;">No alerts set. Create one from any product's results page and Quick will watch the price for you.</p>`
+        : `<div class="table-wrap"><table class="comparison-table" style="min-width:480px;"><thead><tr><th>Product</th><th class="num">Current</th><th class="num">Target</th><th></th></tr></thead><tbody>${alertRows}</tbody></table></div>`}
+    </div>
+
+    <div>
+      <h3 style="font-size:18px;font-weight:600;margin:0 0 12px;">Recent searches</h3>
+      ${state.searchHistory.length === 0
+        ? `<p class="muted" style="font-size:14px;">Your searches will show up here.</p>`
+        : `<div class="row wrap gap-2">${state.searchHistory.map((q) => `<span class="pill">${esc(q)}</span>`).join("")}</div>`}
+    </div>
+  </section>`;
+}
+
+/* ======================================================================
+   NAV + FOOTER
+   ====================================================================== */
+function navHtml() {
+  return `
+  <header class="navbar">
+    <button class="brand" data-action="go-home">${logoSvg()}<span>Quick</span></button>
+    <div class="row gap-2">
+      <button class="nav-link ${state.view === "dashboard" ? "active" : ""}" data-action="go-dashboard">
+        ${icon("dashboard")} Dashboard
+        ${state.savedIds.length > 0 ? `<span class="badge-count mono tabular">${state.savedIds.length}</span>` : ""}
+      </button>
+      <button class="icon-btn" data-action="toggle-theme">${icon(state.isDark ? "sun" : "moon")}</button>
+      <button class="btn btn-coral nav-cta" data-action="go-home">Start comparing</button>
+    </div>
+  </header>`;
+}
+
+function footerHtml() {
+  return `
+  <footer>
+    <div class="footer-inner">
+      <div class="row gap-2">${logoSvg(16)}<span style="font-size:14px;font-weight:600;">Quick</span></div>
+      <p class="footer-note">Prototype interface running a simulated catalog and search API. Prices are illustrative, not live listings.</p>
+    </div>
+  </footer>`;
+}
+
+/* ======================================================================
+   MAIN RENDER
+   ====================================================================== */
+function render() {
+  document.documentElement.dataset.theme = state.isDark ? "dark" : "light";
+  const app = document.getElementById("app");
+  let body = "";
+
+  if (state.view === "home") {
+    body = heroHtml() + catalogSectionHtml() + recommendedSectionHtml() + howItWorksHtml() + trustNoteHtml();
+  } else if (state.view === "understanding") {
+    body = understandingHtml();
+  } else if (state.view === "results-list") {
+    body = resultsListHtml();
+  } else if (state.view === "searching") {
+    const product = PRODUCTS[state.activeProductId];
+    body = product ? searchingHtml(product) : "";
+  } else if (state.view === "results") {
+    const product = PRODUCTS[state.activeProductId];
+    body = product ? resultsHtml(product) : "";
+  } else if (state.view === "dashboard") {
+    body = dashboardHtml();
+  }
+
+  app.innerHTML = navHtml() + body + footerHtml();
+
+  if (state.view === "searching") {
+    const product = PRODUCTS[state.activeProductId];
+    if (product) startSearchAnimation(product);
+  }
+}
+
+/* ======================================================================
+   ACTIONS
+   ====================================================================== */
+async function runSearch(q, forcedId) {
+  state.query = q;
+  state.searchHistory = [q, ...state.searchHistory.filter((x) => x !== q)].slice(0, 8);
+
+  if (forcedId) {
+    state.activeProductId = forcedId;
+    state.sortMode = "best";
+    state.alertCreated = false;
+    setState({ view: "searching" });
+    return;
+  }
+
+  setState({ view: "understanding" });
+  const results = await simulateApi(() => searchCatalog(q, 30));
+  if (results.length === 1) {
+    state.activeProductId = results[0].id;
+    state.sortMode = "best";
+    state.alertCreated = false;
+    setState({ view: "searching" });
+  } else {
+    setState({ searchResults: results, view: "results-list" });
+  }
+}
+
+document.addEventListener("submit", (e) => {
+  const form = e.target.closest('[data-form="search"]');
+  if (!form) return;
+  e.preventDefault();
+  const q = form.querySelector('input[name="q"]').value.trim();
+  if (q) runSearch(q);
+});
+
+document.addEventListener("click", (e) => {
+  const el = e.target.closest("[data-action]");
+  if (!el) return;
+  const action = el.dataset.action;
+
+  if (action === "go-home") setState({ view: "home" });
+  else if (action === "go-dashboard") setState({ view: "dashboard" });
+  else if (action === "toggle-theme") setState({ isDark: !state.isDark });
+  else if (action === "search-text") runSearch(el.dataset.q);
+  else if (action === "filter-cat") setState({ catalogFilter: el.dataset.cat });
+  else if (action === "sort-select") { /* handled by change listener */ }
+  else if (action === "pick") runSearch(el.dataset.name, el.dataset.id);
+  else if (action === "toggle-save") {
+    const id = el.dataset.id;
+    state.savedIds = state.savedIds.includes(id) ? state.savedIds.filter((x) => x !== id) : [...state.savedIds, id];
+    render();
+  }
+  else if (action === "remove-saved") {
+    state.savedIds = state.savedIds.filter((x) => x !== el.dataset.id);
+    render();
+  }
+  else if (action === "set-alert") {
+    const input = document.getElementById("alert-value");
+    const val = Number(input.value);
+    const product = PRODUCTS[state.activeProductId];
+    const rows = annotate(product);
+    const best = rows.find((r) => r.isBestDeal);
+    state.alerts.push({ name: product.name, current: best.total, target: val });
+    setState({ alertCreated: true, alertTarget: val });
+  }
+});
+
+document.addEventListener("change", (e) => {
+  if (e.target.matches('[data-action="sort-select"]')) {
+    setState({ sortMode: e.target.value });
+  }
+});
+
+/* ======================================================================
+   INIT
+   ====================================================================== */
+render();
+</script>
+</body>
+</html>
